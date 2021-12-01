@@ -1,0 +1,17 @@
+name: build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - run: |
+        cargo run -- user-recs data/explicit.csv output.csv --overwrite
+        cargo run -- item-recs data/explicit.csv output.csv --overwrite
+        cargo run -- similar-users data/explicit.csv output.csv --overwrite
+        cargo run -- user-recs data/implicit.csv output.csv --overwrite
+        cargo run -- item-recs data/implicit.csv output.csv --overwrite
+        cargo run -- similar-users data/implicit.csv output.csv --overwrite
