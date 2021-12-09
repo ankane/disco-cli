@@ -24,7 +24,7 @@ With Homebrew, run:
 brew install ankane/brew/disco
 ```
 
-To build from source, run:
+With Cargo, run:
 
 ```sh
 cargo install disco-cli
