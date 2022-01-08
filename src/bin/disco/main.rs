@@ -5,87 +5,94 @@ mod recs;
 use download::*;
 use recs::*;
 
+use clap::{AppSettings, ColorChoice, Parser, Subcommand};
 use std::path::PathBuf;
 use std::process;
-use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
-#[structopt(name = "disco")]
-enum Opt {
+#[derive(Debug, Parser)]
+#[clap(name = "disco", version, color = ColorChoice::Never)]
+#[clap(global_setting(AppSettings::DeriveDisplayOrder))]
+struct Args {
+    #[clap(subcommand)]
+    command: Commands,
+}
+
+#[derive(Debug, Subcommand)]
+enum Commands {
     UserRecs {
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         input: PathBuf,
 
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         output: PathBuf,
 
-        #[structopt(long, default_value = "10")]
+        #[clap(long, default_value = "10")]
         count: usize,
 
-        #[structopt(long, default_value = "8")]
+        #[clap(long, default_value = "8")]
         factors: u32,
 
-        #[structopt(long, default_value = "20")]
+        #[clap(long, default_value = "20")]
         iterations: u32,
 
-        #[structopt(long)]
+        #[clap(long)]
         overwrite: bool,
     },
     ItemRecs {
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         input: PathBuf,
 
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         output: PathBuf,
 
-        #[structopt(long, default_value = "10")]
+        #[clap(long, default_value = "10")]
         count: usize,
 
-        #[structopt(long, default_value = "8")]
+        #[clap(long, default_value = "8")]
         factors: u32,
 
-        #[structopt(long, default_value = "20")]
+        #[clap(long, default_value = "20")]
         iterations: u32,
 
-        #[structopt(long)]
+        #[clap(long)]
         overwrite: bool,
     },
     SimilarUsers {
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         input: PathBuf,
 
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         output: PathBuf,
 
-        #[structopt(long, default_value = "10")]
+        #[clap(long, default_value = "10")]
         count: usize,
 
-        #[structopt(long, default_value = "8")]
+        #[clap(long, default_value = "8")]
         factors: u32,
 
-        #[structopt(long, default_value = "20")]
+        #[clap(long, default_value = "20")]
         iterations: u32,
 
-        #[structopt(long)]
+        #[clap(long)]
         overwrite: bool,
     },
     Download {
-        #[structopt(possible_values(&Dataset::variants()))]
+        #[clap(possible_values(Dataset::variants()))]
         dataset: Dataset,
 
-        #[structopt(parse(from_os_str))]
+        #[clap(parse(from_os_str))]
         output: Option<PathBuf>,
 
-        #[structopt(long)]
+        #[clap(long)]
         overwrite: bool,
     },
 }
 
 fn main() {
-    let opt = Opt::from_args();
+    let args = Args::parse();
 
-    let res = match opt {
-        Opt::UserRecs {
+    let res = match args.command {
+        Commands::UserRecs {
             input,
             output,
             count,
@@ -93,7 +100,7 @@ fn main() {
             iterations,
             overwrite,
         } => user_recs(&input, &output, count, factors, iterations, overwrite),
-        Opt::ItemRecs {
+        Commands::ItemRecs {
             input,
             output,
             count,
@@ -101,7 +108,7 @@ fn main() {
             iterations,
             overwrite,
         } => item_recs(&input, &output, count, factors, iterations, overwrite),
-        Opt::SimilarUsers {
+        Commands::SimilarUsers {
             input,
             output,
             count,
@@ -109,7 +116,7 @@ fn main() {
             iterations,
             overwrite,
         } => similar_users(&input, &output, count, factors, iterations, overwrite),
-        Opt::Download {
+        Commands::Download {
             dataset,
             output,
             overwrite,
