@@ -5,7 +5,7 @@ use std::convert::TryInto;
 use std::error::Error;
 use std::fmt::Write;
 use std::io::{self, BufRead, BufReader, Cursor, Read};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 #[derive(Debug)]
@@ -45,7 +45,7 @@ impl ToString for Dataset {
     }
 }
 
-fn sha256(contents: &Vec<u8>) -> String {
+fn sha256(contents: &[u8]) -> String {
     let mut hasher = Sha256::new();
     hasher.update(contents);
     let result = hasher.finalize();
@@ -71,12 +71,12 @@ fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Erro
 
     let hash = sha256(&contents);
     if hash != expected_hash {
-        return Err(format!("Bad hash: {}", hash))?;
+        return Err(format!("Bad hash: {}", hash).into());
     }
     Ok(contents)
 }
 
-fn download_movielens_100k(output: &PathBuf, overwrite: bool) -> Result<(), Box<dyn Error>> {
+fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
     let mut movies = HashMap::new();
 
     let archive_data = download_file(
@@ -129,7 +129,7 @@ fn download_movielens_100k(output: &PathBuf, overwrite: bool) -> Result<(), Box<
     Ok(())
 }
 
-fn download_movielens_1m(output: &PathBuf, overwrite: bool) -> Result<(), Box<dyn Error>> {
+fn download_movielens_1m(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
     let mut movies = HashMap::new();
 
     let archive_data = download_file(
@@ -178,7 +178,7 @@ fn download_movielens_1m(output: &PathBuf, overwrite: bool) -> Result<(), Box<dy
     Ok(())
 }
 
-fn download_movielens_25m(output: &PathBuf, overwrite: bool) -> Result<(), Box<dyn Error>> {
+fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
     let mut movies = HashMap::new();
 
     let archive_data = download_file(

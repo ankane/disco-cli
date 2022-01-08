@@ -3,12 +3,12 @@ use discorec::{Dataset, Recommender, RecommenderBuilder};
 use std::error::Error;
 use std::fs::File;
 use std::io::ErrorKind;
-use std::path::PathBuf;
+use std::path::Path;
 
-fn fit_recommender(input: &PathBuf, factors: u32, iterations: u32) -> Result<Recommender<String, String>, Box<dyn Error>> {
+fn fit_recommender(input: &Path, factors: u32, iterations: u32) -> Result<Recommender<String, String>, Box<dyn Error>> {
     let file = File::open(input).map_err(|e| -> Box<dyn Error> {
         if e.kind() == ErrorKind::NotFound {
-            String::from(format!("File not found: {}", input.display())).into()
+            format!("File not found: {}", input.display()).into()
         } else {
             e.into()
         }
@@ -16,7 +16,7 @@ fn fit_recommender(input: &PathBuf, factors: u32, iterations: u32) -> Result<Rec
     let mut rdr = csv::Reader::from_reader(file);
 
     let headers = rdr.headers()?;
-    let explicit = headers.iter().position(|r| r == "value").is_none();
+    let explicit = !headers.iter().any(|r| r == "value");
     let value_header = if explicit { "rating" } else { "value" };
 
     let user_index = headers.iter().position(|r| r == "user_id").ok_or("Missing user_id column")?;
@@ -59,9 +59,9 @@ fn fit_recommender(input: &PathBuf, factors: u32, iterations: u32) -> Result<Rec
     Ok(recommender)
 }
 
-pub fn user_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
+pub fn user_recs(input: &Path, output: &Path, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
     if !overwrite {
-        check_exists(&output)?;
+        check_exists(output)?;
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
@@ -74,7 +74,7 @@ pub fn user_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, 
     let bar = progress_bar(user_ids.len() as u64, "Saving recs", "{msg} {wide_bar} {pos}/{len}");
 
     for user in user_ids.iter() {
-        for (recommended_item, score) in recommender.user_recs(&user, count) {
+        for (recommended_item, score) in recommender.user_recs(user, count) {
             wtr.write_record(&[user, recommended_item, &score.to_string()])?;
         }
         bar.inc(1);
@@ -86,9 +86,9 @@ pub fn user_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, 
     Ok(())
 }
 
-pub fn item_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
+pub fn item_recs(input: &Path, output: &Path, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
     if !overwrite {
-        check_exists(&output)?;
+        check_exists(output)?;
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
@@ -101,7 +101,7 @@ pub fn item_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, 
     let bar = progress_bar(item_ids.len() as u64, "Saving recs", "{msg} {wide_bar} {pos}/{len}");
 
     for item in item_ids.iter() {
-        for (recommended_item, score) in recommender.item_recs(&item, count) {
+        for (recommended_item, score) in recommender.item_recs(item, count) {
             wtr.write_record(&[item, recommended_item, &score.to_string()])?;
         }
         bar.inc(1);
@@ -113,9 +113,9 @@ pub fn item_recs(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, 
     Ok(())
 }
 
-pub fn similar_users(input: &PathBuf, output: &PathBuf, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
+pub fn similar_users(input: &Path, output: &Path, count: usize, factors: u32, iterations: u32, overwrite: bool) -> Result<(), Box<dyn Error>> {
     if !overwrite {
-        check_exists(&output)?;
+        check_exists(output)?;
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
@@ -128,7 +128,7 @@ pub fn similar_users(input: &PathBuf, output: &PathBuf, count: usize, factors: u
     let bar = progress_bar(user_ids.len() as u64, "Saving users", "{msg} {wide_bar} {pos}/{len}");
 
     for user in user_ids.iter() {
-        for (similar_user, score) in recommender.similar_users(&user, count) {
+        for (similar_user, score) in recommender.similar_users(user, count) {
             wtr.write_record(&[user, similar_user, &score.to_string()])?;
         }
         bar.inc(1);

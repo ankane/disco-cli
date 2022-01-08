@@ -2,26 +2,26 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::error::Error;
 use std::fs::{File, OpenOptions};
 use std::io::ErrorKind;
-use std::path::PathBuf;
+use std::path::Path;
 
-fn file_exists_message(path: &PathBuf) -> String {
+fn file_exists_message(path: &Path) -> String {
     format!("File exists: {}. Use --overwrite to overwrite.", &path.display())
 }
 
 // check upfront (in addition to when opening) for better user experience (fail fast)
-pub fn check_exists(path: &PathBuf) -> Result<(), Box<dyn Error>> {
+pub fn check_exists(path: &Path) -> Result<(), Box<dyn Error>> {
     if path.exists() {
-        return Err(file_exists_message(path))?;
+        return Err(file_exists_message(path).into());
     }
     Ok(())
 }
 
-pub fn create_csv(path: &PathBuf, overwrite: bool) -> Result<csv::Writer<File>, Box<dyn Error>> {
+pub fn create_csv(path: &Path, overwrite: bool) -> Result<csv::Writer<File>, Box<dyn Error>> {
     let file = create_file(path, overwrite)?;
     Ok(csv::Writer::from_writer(file))
 }
 
-pub fn create_file(path: &PathBuf, overwrite: bool) -> Result<File, Box<dyn Error>> {
+pub fn create_file(path: &Path, overwrite: bool) -> Result<File, Box<dyn Error>> {
     OpenOptions::new()
         .write(true)
         .create(true)
