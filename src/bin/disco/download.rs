@@ -13,11 +13,12 @@ pub enum Dataset {
     Movielens100k,
     Movielens1m,
     Movielens25m,
+    MovielensLatestSmall,
 }
 
 impl Dataset {
-    pub fn variants() -> [&'static str; 3] {
-        ["movielens-100k", "movielens-1m", "movielens-25m"]
+    pub fn variants() -> [&'static str; 4] {
+        ["movielens-100k", "movielens-1m", "movielens-25m", "movielens-latest-small"]
     }
 }
 
@@ -29,6 +30,7 @@ impl FromStr for Dataset {
             "movielens-100k" => Ok(Dataset::Movielens100k),
             "movielens-1m" => Ok(Dataset::Movielens1m),
             "movielens-25m" => Ok(Dataset::Movielens25m),
+            "movielens-latest-small" => Ok(Dataset::MovielensLatestSmall),
             // not shown since possible_values used
             _ => Err(format!("Invalid dataset: {}", s)),
         }
@@ -41,6 +43,7 @@ impl ToString for Dataset {
             Dataset::Movielens100k => "movielens-100k".to_string(),
             Dataset::Movielens1m => "movielens-1m".to_string(),
             Dataset::Movielens25m => "movielens-25m".to_string(),
+            Dataset::MovielensLatestSmall => "movielens-latest-small".to_string(),
         }
     }
 }
@@ -228,6 +231,49 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     Ok(())
 }
 
+fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
+    let mut movies = HashMap::new();
+
+    let archive_data = download_file(
+        "https://files.grouplens.org/datasets/movielens/ml-latest-small.zip",
+        "696d65a3dfceac7c45750ad32df2c259311949efec81f0f144fdfb91ebc9e436",
+    )?;
+    let cursor = Cursor::new(archive_data);
+    let mut archive = zip::ZipArchive::new(cursor)?;
+
+    // make borrow checker happy
+    {
+        let movies_data = archive.by_name("ml-latest-small/movies.csv")?;
+        let mut rdr = csv::ReaderBuilder::new()
+            .from_reader(movies_data);
+        for result in rdr.records() {
+            let record = result?;
+            let id = record.get(0).unwrap().to_string();
+            let title = record.get(1).unwrap().to_string();
+            movies.insert(id, title);
+        }
+    }
+
+    let file = create_file(output, overwrite)?;
+    let mut wtr = csv::Writer::from_writer(file);
+    wtr.write_record(&["user_id", "item_id", "rating"])?;
+
+    let ratings_data = archive.by_name("ml-latest-small/ratings.csv")?;
+    let mut rdr = csv::ReaderBuilder::new()
+        .from_reader(ratings_data);
+    for result in rdr.records() {
+        let record = result?;
+        let user_id = record.get(0).unwrap().to_string();
+        let item_id = record.get(1).unwrap().to_string();
+        let rating = record.get(2).unwrap().to_string();
+        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+    }
+
+    wtr.flush()?;
+
+    Ok(())
+}
+
 pub fn download(dataset: Dataset, output: Option<PathBuf>, overwrite: bool) -> Result<(), Box<dyn Error>> {
     let output = output.unwrap_or_else(|| {
         let mut default_output = PathBuf::from(&dataset.to_string());
@@ -242,6 +288,7 @@ pub fn download(dataset: Dataset, output: Option<PathBuf>, overwrite: bool) -> R
         Dataset::Movielens100k => "https://files.grouplens.org/datasets/movielens/ml-100k-README.txt",
         Dataset::Movielens1m => "https://files.grouplens.org/datasets/movielens/ml-1m-README.txt",
         Dataset::Movielens25m => "https://files.grouplens.org/datasets/movielens/ml-25m-README.html",
+        Dataset::MovielensLatestSmall => "https://files.grouplens.org/datasets/movielens/ml-latest-small-README.html",
     };
     eprintln!("For dataset usage info, see {}", usage_url);
 
@@ -249,6 +296,7 @@ pub fn download(dataset: Dataset, output: Option<PathBuf>, overwrite: bool) -> R
         Dataset::Movielens100k => download_movielens_100k(&output, overwrite),
         Dataset::Movielens1m => download_movielens_1m(&output, overwrite),
         Dataset::Movielens25m => download_movielens_25m(&output, overwrite),
+        Dataset::MovielensLatestSmall => download_movielens_latest_small(&output, overwrite),
     };
     if res.is_ok() {
         eprintln!("Saved to {}", output.display());
