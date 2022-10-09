@@ -8,7 +8,7 @@ use std::io::{self, BufRead, BufReader, Cursor, Read};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Dataset {
     Movielens100k,
     Movielens1m,

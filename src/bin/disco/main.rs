@@ -5,85 +5,85 @@ mod recs;
 use download::*;
 use recs::*;
 
-use clap::{AppSettings, ColorChoice, Parser, Subcommand};
+use clap::{ColorChoice, Parser, Subcommand};
+use clap::builder::{PossibleValuesParser, TypedValueParser};
 use std::path::PathBuf;
 use std::process;
 
 #[derive(Debug, Parser)]
-#[clap(name = "disco", version, color = ColorChoice::Never)]
-#[clap(global_setting(AppSettings::DeriveDisplayOrder))]
+#[command(name = "disco", version, color = ColorChoice::Never)]
 struct Args {
-    #[clap(subcommand)]
+    #[command(subcommand)]
     command: Commands,
 }
 
 #[derive(Debug, Subcommand)]
 enum Commands {
     UserRecs {
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         input: PathBuf,
 
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         output: PathBuf,
 
-        #[clap(long, default_value = "10")]
+        #[arg(long, default_value_t = 10)]
         count: usize,
 
-        #[clap(long, default_value = "8")]
+        #[arg(long, default_value_t = 8)]
         factors: u32,
 
-        #[clap(long, default_value = "20")]
+        #[arg(long, default_value_t = 20)]
         iterations: u32,
 
-        #[clap(long)]
+        #[arg(long)]
         overwrite: bool,
     },
     ItemRecs {
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         input: PathBuf,
 
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         output: PathBuf,
 
-        #[clap(long, default_value = "10")]
+        #[arg(long, default_value_t = 10)]
         count: usize,
 
-        #[clap(long, default_value = "8")]
+        #[arg(long, default_value_t = 8)]
         factors: u32,
 
-        #[clap(long, default_value = "20")]
+        #[arg(long, default_value_t = 20)]
         iterations: u32,
 
-        #[clap(long)]
+        #[arg(long)]
         overwrite: bool,
     },
     SimilarUsers {
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         input: PathBuf,
 
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         output: PathBuf,
 
-        #[clap(long, default_value = "10")]
+        #[arg(long, default_value_t = 10)]
         count: usize,
 
-        #[clap(long, default_value = "8")]
+        #[arg(long, default_value_t = 8)]
         factors: u32,
 
-        #[clap(long, default_value = "20")]
+        #[arg(long, default_value_t = 20)]
         iterations: u32,
 
-        #[clap(long)]
+        #[arg(long)]
         overwrite: bool,
     },
     Download {
-        #[clap(possible_values(Dataset::variants()))]
+        #[arg(value_parser = PossibleValuesParser::new(Dataset::variants()).map(|s| s.parse::<Dataset>().unwrap()))]
         dataset: Dataset,
 
-        #[clap(parse(from_os_str))]
+        #[arg(value_parser)]
         output: Option<PathBuf>,
 
-        #[clap(long)]
+        #[arg(long)]
         overwrite: bool,
     },
 }
