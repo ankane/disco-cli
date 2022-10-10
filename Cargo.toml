@@ -21,3 +21,4 @@ zip = "0.5"
 
 [[bin]]
 name = "disco"
+path = "src/main.rs"
