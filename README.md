@@ -18,13 +18,13 @@ Download the latest version:
 - Linux - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-unknown-linux-gnu.tar.gz)
 - Windows - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-pc-windows-msvc.zip)
 
-With Homebrew, run:
+You can also install it with Homebrew:
 
 ```sh
 brew install ankane/brew/disco
 ```
 
-With Cargo, run:
+or Cargo:
 
 ```sh
 cargo install disco-cli
