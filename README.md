@@ -12,11 +12,11 @@ Also available for [Rust](https://github.com/ankane/disco-rust) and [Ruby](https
 
 ## Installation
 
-Download the latest version for your platform:
+Download the latest version:
 
-- [Mac x86](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-apple-darwin.tar.gz) or [Mac ARM](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-aarch64-apple-darwin.tar.gz)
-- [Linux](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-unknown-linux-gnu.tar.gz)
-- [Windows](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-pc-windows-msvc.zip)
+- Mac - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-apple-darwin.tar.gz) or [arm64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-aarch64-apple-darwin.tar.gz)
+- Linux - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-unknown-linux-gnu.tar.gz)
+- Windows - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-pc-windows-msvc.zip)
 
 With Homebrew, run:
 
