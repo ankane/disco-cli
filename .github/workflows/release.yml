@@ -6,7 +6,6 @@ jobs:
       ARTIFACT_NAME: disco
       ARTIFACT_VERSION: 0.1.0
       ARTIFACT_EXT: ${{ startsWith(matrix.os, 'windows') && 'zip' || 'tar.gz' }}
-      # TODO make generic
       BIN_PATTERN: ${{ startsWith(matrix.os, 'windows') && '*.exe' || 'disco' }}
     strategy:
       fail-fast: false
@@ -24,12 +23,15 @@ jobs:
           os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        target: ${{ matrix.target }}
+    - uses: actions/checkout@v3
 
+    - if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' }}
+      run: |
+        sudo apt update
+        sudo apt install gcc-aarch64-linux-gnu
+        echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
+
+    - run: rustup target add ${{ matrix.target }}
     - run: cargo build --release --target ${{ matrix.target }}
     - run: cargo install cargo-3pl
 
