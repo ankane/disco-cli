@@ -50,7 +50,7 @@ jobs:
     - if: ${{ env.ARTIFACT_EXT == 'zip' }}
       run: cd dist && Compress-Archive -DestinationPath ../${{ env.ARTIFACT_NAME }}-${{ env.ARTIFACT_VERSION }}-${{ matrix.target }}.zip -Path *
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: ${{ env.ARTIFACT_NAME }}-${{ env.ARTIFACT_VERSION }}-${{ matrix.target }}.${{ env.ARTIFACT_EXT }}
         path: ${{ env.ARTIFACT_NAME }}-${{ env.ARTIFACT_VERSION }}-${{ matrix.target }}.${{ env.ARTIFACT_EXT }}
