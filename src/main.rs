@@ -5,13 +5,13 @@ mod recs;
 use download::*;
 use recs::*;
 
-use clap::{ColorChoice, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 use clap::builder::{PossibleValuesParser, TypedValueParser};
 use std::path::PathBuf;
 use std::process;
 
 #[derive(Debug, Parser)]
-#[command(name = "disco", version, color = ColorChoice::Never)]
+#[command(name = "disco", version)]
 struct Args {
     #[command(subcommand)]
     command: Commands,
