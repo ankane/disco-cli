@@ -1,4 +1,4 @@
-## 0.1.1 (unreleased)
+## 0.1.1 (2022-11-07)
 
 - Added `movielens-latest` dataset
 - Added `movielens-latest-small` dataset

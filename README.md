@@ -14,9 +14,9 @@ Also available for [Rust](https://github.com/ankane/disco-rust) and [Ruby](https
 
 Download the latest version:
 
-- Linux - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-unknown-linux-gnu.tar.gz)
-- Mac - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-apple-darwin.tar.gz) or [arm64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-aarch64-apple-darwin.tar.gz)
-- Windows - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.0/disco-0.1.0-x86_64-pc-windows-msvc.zip)
+- Linux - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.1/disco-cli-0.1.1-x86_64-unknown-linux-gnu.tar.gz)
+- Mac - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.1/disco-cli-0.1.1-x86_64-apple-darwin.tar.gz) or [arm64](https://github.com/ankane/disco-cli/releases/download/v0.1.1/disco-cli-0.1.1-aarch64-apple-darwin.tar.gz)
+- Windows - [x86_64](https://github.com/ankane/disco-cli/releases/download/v0.1.1/disco-cli-0.1.1-x86_64-pc-windows-msvc.zip)
 
 You can also install it with Homebrew:
 
@@ -128,8 +128,8 @@ Supported datasets are:
 - movielens-100k
 - movielens-1m
 - movielens-25m
-- movielens-latest-small [unreleased]
-- movielens-latest [unreleased]
+- movielens-latest-small
+- movielens-latest
 
 ## History
 
