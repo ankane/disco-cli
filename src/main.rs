@@ -19,6 +19,7 @@ struct Args {
 
 #[derive(Debug, Subcommand)]
 enum Commands {
+    /// Generate user-based recommendations
     UserRecs {
         #[arg(value_parser)]
         input: PathBuf,
@@ -38,6 +39,7 @@ enum Commands {
         #[arg(long)]
         overwrite: bool,
     },
+    /// Generate item-based recommendations
     ItemRecs {
         #[arg(value_parser)]
         input: PathBuf,
@@ -57,6 +59,7 @@ enum Commands {
         #[arg(long)]
         overwrite: bool,
     },
+    /// Generate similar users
     SimilarUsers {
         #[arg(value_parser)]
         input: PathBuf,
@@ -76,6 +79,7 @@ enum Commands {
         #[arg(long)]
         overwrite: bool,
     },
+    /// Download a dataset
     Download {
         #[arg(value_parser = PossibleValuesParser::new(Dataset::variants()).map(|s| s.parse::<Dataset>().unwrap()))]
         dataset: Dataset,
