@@ -4,11 +4,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - run: |
-        cargo run -- user-recs data/explicit.csv output.csv --overwrite
-        cargo run -- item-recs data/explicit.csv output.csv --overwrite
-        cargo run -- similar-users data/explicit.csv output.csv --overwrite
-        cargo run -- user-recs data/implicit.csv output.csv --overwrite
-        cargo run -- item-recs data/implicit.csv output.csv --overwrite
-        cargo run -- similar-users data/implicit.csv output.csv --overwrite
+      - uses: actions/checkout@v3
+      - run: |
+          cargo run -- user-recs data/explicit.csv output.csv --overwrite
+          cargo run -- item-recs data/explicit.csv output.csv --overwrite
+          cargo run -- similar-users data/explicit.csv output.csv --overwrite
+          cargo run -- user-recs data/implicit.csv output.csv --overwrite
+          cargo run -- item-recs data/implicit.csv output.csv --overwrite
+          cargo run -- similar-users data/implicit.csv output.csv --overwrite
