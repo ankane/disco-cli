@@ -69,13 +69,13 @@ pub fn user_recs(input: &Path, output: &Path, count: usize, factors: u32, iterat
     user_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
-    wtr.write_record(&["user_id", "recommended_item_id", "score"])?;
+    wtr.write_record(["user_id", "recommended_item_id", "score"])?;
 
     let bar = progress_bar(user_ids.len() as u64, "Saving recs", "{msg} {wide_bar} {pos}/{len}");
 
     for user in user_ids.iter() {
         for (recommended_item, score) in recommender.user_recs(user, count) {
-            wtr.write_record(&[user, recommended_item, &score.to_string()])?;
+            wtr.write_record([user, recommended_item, &score.to_string()])?;
         }
         bar.inc(1);
     }
@@ -96,13 +96,13 @@ pub fn item_recs(input: &Path, output: &Path, count: usize, factors: u32, iterat
     item_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
-    wtr.write_record(&["item_id", "recommended_item_id", "score"])?;
+    wtr.write_record(["item_id", "recommended_item_id", "score"])?;
 
     let bar = progress_bar(item_ids.len() as u64, "Saving recs", "{msg} {wide_bar} {pos}/{len}");
 
     for item in item_ids.iter() {
         for (recommended_item, score) in recommender.item_recs(item, count) {
-            wtr.write_record(&[item, recommended_item, &score.to_string()])?;
+            wtr.write_record([item, recommended_item, &score.to_string()])?;
         }
         bar.inc(1);
     }
@@ -123,13 +123,13 @@ pub fn similar_users(input: &Path, output: &Path, count: usize, factors: u32, it
     user_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
-    wtr.write_record(&["user_id", "similar_user_id", "score"])?;
+    wtr.write_record(["user_id", "similar_user_id", "score"])?;
 
     let bar = progress_bar(user_ids.len() as u64, "Saving users", "{msg} {wide_bar} {pos}/{len}");
 
     for user in user_ids.iter() {
         for (similar_user, score) in recommender.similar_users(user, count) {
-            wtr.write_record(&[user, similar_user, &score.to_string()])?;
+            wtr.write_record([user, similar_user, &score.to_string()])?;
         }
         bar.inc(1);
     }

@@ -115,7 +115,7 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
 
     let file = create_file(output, overwrite)?;
     let mut wtr = csv::Writer::from_writer(file);
-    wtr.write_record(&["user_id", "item_id", "rating"])?;
+    wtr.write_record(["user_id", "item_id", "rating"])?;
 
     let ratings_data = archive.by_name("ml-100k/u.data")?;
     let mut rdr = csv::ReaderBuilder::new()
@@ -127,7 +127,7 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
         let user_id = record.get(0).unwrap().to_string();
         let item_id = record.get(1).unwrap().to_string();
         let rating = record.get(2).unwrap().to_string();
-        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
     }
 
     wtr.flush()?;
@@ -166,7 +166,7 @@ fn download_movielens_1m(output: &Path, overwrite: bool) -> Result<(), Box<dyn E
 
     let file = create_file(output, overwrite)?;
     let mut wtr = csv::Writer::from_writer(file);
-    wtr.write_record(&["user_id", "item_id", "rating"])?;
+    wtr.write_record(["user_id", "item_id", "rating"])?;
 
     let ratings_data = archive.by_name("ml-1m/ratings.dat")?;
     let rdr = BufReader::new(ratings_data);
@@ -176,7 +176,7 @@ fn download_movielens_1m(output: &Path, overwrite: bool) -> Result<(), Box<dyn E
         let user_id = parts.next().unwrap().to_string();
         let item_id = parts.next().unwrap().to_string();
         let rating = parts.next().unwrap().to_string();
-        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
     }
 
     wtr.flush()?;
@@ -210,7 +210,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
 
     let file = create_file(output, overwrite)?;
     let mut wtr = csv::Writer::from_writer(file);
-    wtr.write_record(&["user_id", "item_id", "rating"])?;
+    wtr.write_record(["user_id", "item_id", "rating"])?;
 
     // show processing progress since it takes a while
     let bar = progress_bar(25000095, "Processing", "{msg} {wide_bar} {percent}%");
@@ -224,7 +224,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
         let user_id = record.get(0).unwrap().to_string();
         let item_id = record.get(1).unwrap().to_string();
         let rating = record.get(2).unwrap().to_string();
-        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
         bar.inc(1);
     }
 
@@ -259,7 +259,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
 
     let file = create_file(output, overwrite)?;
     let mut wtr = csv::Writer::from_writer(file);
-    wtr.write_record(&["user_id", "item_id", "rating"])?;
+    wtr.write_record(["user_id", "item_id", "rating"])?;
 
     let ratings_data = archive.by_name("ml-latest-small/ratings.csv")?;
     let mut rdr = csv::ReaderBuilder::new()
@@ -269,7 +269,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
         let user_id = record.get(0).unwrap().to_string();
         let item_id = record.get(1).unwrap().to_string();
         let rating = record.get(2).unwrap().to_string();
-        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
     }
 
     wtr.flush()?;
@@ -302,7 +302,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
 
     let file = create_file(output, overwrite)?;
     let mut wtr = csv::Writer::from_writer(file);
-    wtr.write_record(&["user_id", "item_id", "rating"])?;
+    wtr.write_record(["user_id", "item_id", "rating"])?;
 
     // show processing progress since it takes a while
     let bar = progress_bar(27753444, "Processing", "{msg} {wide_bar} {percent}%");
@@ -316,7 +316,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
         let user_id = record.get(0).unwrap().to_string();
         let item_id = record.get(1).unwrap().to_string();
         let rating = record.get(2).unwrap().to_string();
-        wtr.write_record(&[user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
         bar.inc(1);
     }
 
