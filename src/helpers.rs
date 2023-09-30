@@ -5,7 +5,10 @@ use std::io::ErrorKind;
 use std::path::Path;
 
 fn file_exists_message(path: &Path) -> String {
-    format!("File exists: {}. Use --overwrite to overwrite.", &path.display())
+    format!(
+        "File exists: {}. Use --overwrite to overwrite.",
+        &path.display()
+    )
 }
 
 // check upfront (in addition to when opening) for better user experience (fail fast)

@@ -20,7 +20,13 @@ pub enum Dataset {
 
 impl Dataset {
     pub fn variants() -> [&'static str; 5] {
-        ["movielens-100k", "movielens-1m", "movielens-25m", "movielens-latest-small", "movielens-latest"]
+        [
+            "movielens-100k",
+            "movielens-1m",
+            "movielens-25m",
+            "movielens-latest-small",
+            "movielens-latest",
+        ]
     }
 }
 
@@ -67,9 +73,7 @@ fn sha256(contents: &[u8]) -> String {
 
 fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Error>> {
     let tls_connector = Arc::new(native_tls::TlsConnector::new()?);
-    let agent = ureq::builder()
-        .tls_connector(tls_connector.clone())
-        .build();
+    let agent = ureq::builder().tls_connector(tls_connector.clone()).build();
     let response = agent.get(url).call()?;
     if response.status() != 200 {
         return Err(format!("Bad status: {}", response.status()).into());
@@ -77,9 +81,16 @@ fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Erro
     let content_length: usize = response.header("Content-Length").unwrap().parse()?;
     let mut contents = Vec::with_capacity(content_length);
 
-    let bar = progress_bar(content_length.try_into().unwrap(), "Downloading", "{msg} {wide_bar} {percent}%");
+    let bar = progress_bar(
+        content_length.try_into().unwrap(),
+        "Downloading",
+        "{msg} {wide_bar} {percent}%",
+    );
 
-    io::copy(&mut response.into_reader(), &mut bar.wrap_write(&mut contents))?;
+    io::copy(
+        &mut response.into_reader(),
+        &mut bar.wrap_write(&mut contents),
+    )?;
 
     bar.finish();
 
@@ -206,8 +217,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     {
         let movies_data = archive.by_name("ml-25m/movies.csv")?;
 
-        let mut rdr = csv::ReaderBuilder::new()
-            .from_reader(movies_data);
+        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -225,8 +235,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     bar.set_draw_delta(250000);
 
     let ratings_data = archive.by_name("ml-25m/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new()
-        .from_reader(ratings_data);
+    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -255,8 +264,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-latest-small/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new()
-            .from_reader(movies_data);
+        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -270,8 +278,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
     wtr.write_record(["user_id", "item_id", "rating"])?;
 
     let ratings_data = archive.by_name("ml-latest-small/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new()
-        .from_reader(ratings_data);
+    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -298,8 +305,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-latest/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new()
-            .from_reader(movies_data);
+        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -317,8 +323,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
     bar.set_draw_delta(250000);
 
     let ratings_data = archive.by_name("ml-latest/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new()
-        .from_reader(ratings_data);
+    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -334,7 +339,11 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
     Ok(())
 }
 
-pub fn download(dataset: Dataset, output: Option<PathBuf>, overwrite: bool) -> Result<(), Box<dyn Error>> {
+pub fn download(
+    dataset: Dataset,
+    output: Option<PathBuf>,
+    overwrite: bool,
+) -> Result<(), Box<dyn Error>> {
     let output = output.unwrap_or_else(|| {
         let mut default_output = PathBuf::from(&dataset.to_string());
         default_output.set_extension("csv");
@@ -345,11 +354,19 @@ pub fn download(dataset: Dataset, output: Option<PathBuf>, overwrite: bool) -> R
     }
 
     let usage_url = match dataset {
-        Dataset::Movielens100k => "https://files.grouplens.org/datasets/movielens/ml-100k-README.txt",
+        Dataset::Movielens100k => {
+            "https://files.grouplens.org/datasets/movielens/ml-100k-README.txt"
+        }
         Dataset::Movielens1m => "https://files.grouplens.org/datasets/movielens/ml-1m-README.txt",
-        Dataset::Movielens25m => "https://files.grouplens.org/datasets/movielens/ml-25m-README.html",
-        Dataset::MovielensLatestSmall => "https://files.grouplens.org/datasets/movielens/ml-latest-small-README.html",
-        Dataset::MovielensLatest => "https://files.grouplens.org/datasets/movielens/ml-latest-README.html",
+        Dataset::Movielens25m => {
+            "https://files.grouplens.org/datasets/movielens/ml-25m-README.html"
+        }
+        Dataset::MovielensLatestSmall => {
+            "https://files.grouplens.org/datasets/movielens/ml-latest-small-README.html"
+        }
+        Dataset::MovielensLatest => {
+            "https://files.grouplens.org/datasets/movielens/ml-latest-README.html"
+        }
     };
     eprintln!("For dataset usage info, see {}", usage_url);
 

@@ -5,8 +5,8 @@ mod recs;
 use download::*;
 use recs::*;
 
-use clap::{Parser, Subcommand};
 use clap::builder::{PossibleValuesParser, TypedValueParser};
+use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 use std::process;
 
