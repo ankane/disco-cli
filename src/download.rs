@@ -132,7 +132,7 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
         let mut rdr = csv::ReaderBuilder::new()
             .has_headers(false)
             .delimiter(b'|')
-            .from_reader(&buf[..]);
+            .from_reader(buf.as_slice());
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
