@@ -113,17 +113,26 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
 
     // make borrow checker happy
     {
-        let mut movies_data = archive.by_name("ml-100k/u.item")?;
+        let movies_data = archive.by_name("ml-100k/u.item")?;
 
-        // remove invalid UTF-8 bytes
         let mut buf = Vec::new();
-        movies_data.read_to_end(&mut buf)?;
-        let movies_data = String::from_utf8_lossy(&buf);
+        for b in movies_data.bytes() {
+            let v = b.unwrap();
+
+            // ISO-8859-1 to UTF-8
+            // first 128 are same
+            if v < 128 {
+                buf.push(v);
+            } else {
+                buf.push(195);
+                buf.push(v - 64);
+            }
+        }
 
         let mut rdr = csv::ReaderBuilder::new()
             .has_headers(false)
             .delimiter(b'|')
-            .from_reader(movies_data.as_bytes());
+            .from_reader(&buf[..]);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
