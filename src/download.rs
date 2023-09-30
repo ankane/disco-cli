@@ -7,6 +7,7 @@ use std::fmt::Write;
 use std::io::{self, BufRead, BufReader, Cursor, Read};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
+use std::sync::Arc;
 
 #[derive(Clone, Debug)]
 pub enum Dataset {
@@ -65,13 +66,20 @@ fn sha256(contents: &[u8]) -> String {
 }
 
 fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Error>> {
-    let mut response = reqwest::blocking::get(url)?.error_for_status()?;
-    let content_length = response.content_length().unwrap();
-    let mut contents = Vec::with_capacity(content_length.try_into()?);
+    let tls_connector = Arc::new(native_tls::TlsConnector::new()?);
+    let agent = ureq::builder()
+        .tls_connector(tls_connector.clone())
+        .build();
+    let response = agent.get(url).call()?;
+    if response.status() != 200 {
+        return Err(format!("Bad status: {}", response.status()).into());
+    }
+    let content_length: usize = response.header("Content-Length").unwrap().parse()?;
+    let mut contents = Vec::with_capacity(content_length);
 
-    let bar = progress_bar(content_length, "Downloading", "{msg} {wide_bar} {percent}%");
+    let bar = progress_bar(content_length.try_into().unwrap(), "Downloading", "{msg} {wide_bar} {percent}%");
 
-    io::copy(&mut response, &mut bar.wrap_write(&mut contents))?;
+    io::copy(&mut response.into_reader(), &mut bar.wrap_write(&mut contents))?;
 
     bar.finish();
 
