@@ -8,7 +8,7 @@
 
 Also available for [Rust](https://github.com/ankane/disco-rust) and [Ruby](https://github.com/ankane/disco)
 
-[![Build Status](https://github.com/ankane/disco-cli/workflows/build/badge.svg?branch=master)](https://github.com/ankane/disco-cli/actions)
+[![Build Status](https://github.com/ankane/disco-cli/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/disco-cli/actions)
 
 ## Installation
 
