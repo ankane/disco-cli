@@ -16,9 +16,9 @@ csv = "1"
 discorec = { git = "https://github.com/ankane/disco-rust.git" }
 indicatif = "0.16"
 native-tls = "0.2"
-sha2 = "0.9"
+sha2 = "0.10"
 ureq = { version = "2", default-features = false, features = ["gzip", "native-tls"] }
-zip = "0.5"
+zip = { version = "2", default-features = false, features = ["deflate-flate2"] }
 
 [[bin]]
 name = "disco"
