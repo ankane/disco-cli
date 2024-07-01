@@ -14,7 +14,7 @@ readme = "README.md"
 clap = { version = "4", default-features = false, features = ["std", "help", "usage", "error-context", "suggestions", "derive"] }
 csv = "1"
 discorec = { git = "https://github.com/ankane/disco-rust.git" }
-indicatif = "0.16"
+indicatif = "0.17"
 native-tls = "0.2"
 sha2 = "0.10"
 ureq = { version = "2", default-features = false, features = ["gzip", "native-tls"] }

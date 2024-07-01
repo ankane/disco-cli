@@ -44,7 +44,7 @@ pub fn create_file(path: &Path, overwrite: bool) -> Result<File, Box<dyn Error>>
 
 pub fn progress_bar(len: u64, message: &'static str, template: &str) -> ProgressBar {
     let bar = ProgressBar::new(len);
-    bar.set_style(ProgressStyle::default_bar().template(template));
+    bar.set_style(ProgressStyle::default_bar().template(template).unwrap());
     bar.set_message(message);
     bar
 }

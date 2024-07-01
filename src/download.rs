@@ -241,7 +241,6 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
 
     // show processing progress since it takes a while
     let bar = progress_bar(25000095, "Processing", "{msg} {wide_bar} {percent}%");
-    bar.set_draw_delta(250000);
 
     let ratings_data = archive.by_name("ml-25m/ratings.csv")?;
     let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
@@ -329,7 +328,6 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
 
     // show processing progress since it takes a while
     let bar = progress_bar(27753444, "Processing", "{msg} {wide_bar} {percent}%");
-    bar.set_draw_delta(250000);
 
     let ratings_data = archive.by_name("ml-latest/ratings.csv")?;
     let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
