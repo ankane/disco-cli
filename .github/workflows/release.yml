@@ -18,13 +18,17 @@ jobs:
           os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      with:
+        repository: ankane/3pl-sources
+        path: /tmp/3pl-sources
     - uses: ankane/rust-release@v1
       with:
         target: ${{ matrix.target }}
-        manual-licenses-path: .github/workflows/LICENSE-MANUAL
+        manual-licenses-sources: /tmp/3pl-sources
       id: rust-release
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.rust-release.outputs.artifact-name }}
         path: ${{ steps.rust-release.outputs.artifact-path }}
