@@ -21,12 +21,12 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/checkout@v4
       with:
-        repository: ankane/3pl-sources
-        path: /tmp/3pl-sources
+        repository: ankane/3pl-source
+        path: 3pl-sources
     - uses: ankane/rust-release@v1
       with:
         target: ${{ matrix.target }}
-        manual-licenses-sources: /tmp/3pl-sources
+        manual-licenses-source: 3pl-source
       id: rust-release
     - uses: actions/upload-artifact@v4
       with:
