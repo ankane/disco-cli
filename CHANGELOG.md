@@ -1,4 +1,4 @@
-## 0.1.2 (unreleased)
+## 0.1.2 (2024-07-04)
 
 - Reduced dependencies
 
