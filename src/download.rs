@@ -46,14 +46,14 @@ impl FromStr for Dataset {
     }
 }
 
-impl ToString for Dataset {
-    fn to_string(&self) -> String {
+impl std::fmt::Display for Dataset {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Dataset::Movielens100k => "movielens-100k".to_string(),
-            Dataset::Movielens1m => "movielens-1m".to_string(),
-            Dataset::Movielens25m => "movielens-25m".to_string(),
-            Dataset::MovielensLatestSmall => "movielens-latest-small".to_string(),
-            Dataset::MovielensLatest => "movielens-latest".to_string(),
+            Dataset::Movielens100k => write!(f, "movielens-100k"),
+            Dataset::Movielens1m => write!(f, "movielens-1m"),
+            Dataset::Movielens25m => write!(f, "movielens-25m"),
+            Dataset::MovielensLatestSmall => write!(f, "movielens-latest-small"),
+            Dataset::MovielensLatest => write!(f, "movielens-latest"),
         }
     }
 }
