@@ -124,7 +124,7 @@ fn main() {
             dataset,
             output,
             overwrite,
-        } => download(dataset, output, overwrite),
+        } => download(&dataset, output, overwrite),
     };
 
     if let Err(err) = res {

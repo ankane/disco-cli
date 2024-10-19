@@ -347,7 +347,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
 }
 
 pub fn download(
-    dataset: Dataset,
+    dataset: &Dataset,
     output: Option<PathBuf>,
     overwrite: bool,
 ) -> Result<(), Box<dyn Error>> {
