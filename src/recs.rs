@@ -110,7 +110,7 @@ pub fn user_recs(
         "{msg} {wide_bar} {pos}/{len}",
     );
 
-    for user in user_ids.iter() {
+    for user in &user_ids {
         for (recommended_item, score) in recommender.user_recs(user, count) {
             wtr.write_record([user, recommended_item, &score.to_string()])?;
         }
@@ -148,7 +148,7 @@ pub fn item_recs(
         "{msg} {wide_bar} {pos}/{len}",
     );
 
-    for item in item_ids.iter() {
+    for item in &item_ids {
         for (recommended_item, score) in recommender.item_recs(item, count) {
             wtr.write_record([item, recommended_item, &score.to_string()])?;
         }
@@ -186,7 +186,7 @@ pub fn similar_users(
         "{msg} {wide_bar} {pos}/{len}",
     );
 
-    for user in user_ids.iter() {
+    for user in &user_ids {
         for (similar_user, score) in recommender.similar_users(user, count) {
             wtr.write_record([user, similar_user, &score.to_string()])?;
         }
