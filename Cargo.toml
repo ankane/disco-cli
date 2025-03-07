@@ -17,8 +17,8 @@ discorec = "0.2"
 indicatif = "0.17"
 native-tls = "0.2"
 sha2 = "0.10"
-ureq = { version = "2", default-features = false, features = ["gzip", "native-tls"] }
-zip = { version = "2", default-features = false, features = ["deflate-flate2"] }
+ureq = { version = "3", default-features = false, features = ["gzip", "native-tls"] }
+zip = { version = "2", default-features = false, features = ["deflate-flate2", "deflate-zlib"] }
 
 [[bin]]
 name = "disco"
