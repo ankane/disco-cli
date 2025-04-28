@@ -15,9 +15,8 @@ clap = { version = "4", default-features = false, features = ["std", "help", "us
 csv = "1"
 discorec = "0.2"
 indicatif = "0.17"
-native-tls = "0.2"
 sha2 = "0.10"
-ureq = { version = "3", default-features = false, features = ["gzip", "native-tls"] }
+ureq = { version = "3", default-features = false, features = ["gzip", "platform-verifier", "rustls"] }
 zip = { version = "2", default-features = false, features = ["deflate-flate2", "deflate-zlib"] }
 
 [[bin]]

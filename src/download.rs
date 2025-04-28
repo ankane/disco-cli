@@ -72,7 +72,7 @@ fn sha256(contents: &[u8]) -> String {
 
 fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Error>> {
     let tls_config = ureq::tls::TlsConfig::builder()
-        .provider(ureq::tls::TlsProvider::NativeTls)
+        .root_certs(ureq::tls::RootCerts::PlatformVerifier)
         .build();
     let config = ureq::Agent::config_builder().tls_config(tls_config).build();
     let agent: ureq::Agent = config.into();
