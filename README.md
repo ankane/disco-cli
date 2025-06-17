@@ -128,6 +128,7 @@ Supported datasets are:
 - movielens-100k
 - movielens-1m
 - movielens-25m
+- movielens-32m
 - movielens-latest-small
 - movielens-latest
 

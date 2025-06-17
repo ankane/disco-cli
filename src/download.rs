@@ -13,16 +13,18 @@ pub enum Dataset {
     Movielens100k,
     Movielens1m,
     Movielens25m,
+    Movielens32m,
     MovielensLatestSmall,
     MovielensLatest,
 }
 
 impl Dataset {
-    pub fn variants() -> [&'static str; 5] {
+    pub fn variants() -> [&'static str; 6] {
         [
             "movielens-100k",
             "movielens-1m",
             "movielens-25m",
+            "movielens-32m",
             "movielens-latest-small",
             "movielens-latest",
         ]
@@ -37,6 +39,7 @@ impl FromStr for Dataset {
             "movielens-100k" => Ok(Dataset::Movielens100k),
             "movielens-1m" => Ok(Dataset::Movielens1m),
             "movielens-25m" => Ok(Dataset::Movielens25m),
+            "movielens-32m" => Ok(Dataset::Movielens32m),
             "movielens-latest-small" => Ok(Dataset::MovielensLatestSmall),
             "movielens-latest" => Ok(Dataset::MovielensLatest),
             // not shown since possible_values used
@@ -51,6 +54,7 @@ impl std::fmt::Display for Dataset {
             Dataset::Movielens100k => write!(f, "movielens-100k"),
             Dataset::Movielens1m => write!(f, "movielens-1m"),
             Dataset::Movielens25m => write!(f, "movielens-25m"),
+            Dataset::Movielens32m => write!(f, "movielens-32m"),
             Dataset::MovielensLatestSmall => write!(f, "movielens-latest-small"),
             Dataset::MovielensLatest => write!(f, "movielens-latest"),
         }
@@ -266,6 +270,53 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     Ok(())
 }
 
+fn download_movielens_32m(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
+    let mut movies = HashMap::new();
+
+    let archive_data = download_file(
+        "https://files.grouplens.org/datasets/movielens/ml-32m.zip",
+        "e4a68655d7386b8f95f2f2424b2ff975dfdd15ffd59e0d864a14dca43e99d6ee",
+    )?;
+    let cursor = Cursor::new(archive_data);
+    let mut archive = zip::ZipArchive::new(cursor)?;
+
+    // make borrow checker happy
+    {
+        let movies_data = archive.by_name("ml-32m/movies.csv")?;
+
+        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
+        for result in rdr.records() {
+            let record = result?;
+            let id = record.get(0).unwrap().to_string();
+            let title = record.get(1).unwrap().to_string();
+            movies.insert(id, title);
+        }
+    }
+
+    let file = create_file(output, overwrite)?;
+    let mut wtr = csv::Writer::from_writer(file);
+    wtr.write_record(["user_id", "item_id", "rating"])?;
+
+    // show processing progress since it takes a while
+    let bar = progress_bar(32000204, "Processing", "{msg} {wide_bar} {percent}%");
+
+    let ratings_data = archive.by_name("ml-32m/ratings.csv")?;
+    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
+    for result in rdr.records() {
+        let record = result?;
+        let user_id = record.get(0).unwrap().to_string();
+        let item_id = record.get(1).unwrap().to_string();
+        let rating = record.get(2).unwrap().to_string();
+        wtr.write_record([user_id, movies.get(&item_id).unwrap().to_string(), rating])?;
+        bar.inc(1);
+    }
+
+    wtr.flush()?;
+    bar.finish();
+
+    Ok(())
+}
+
 fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(), Box<dyn Error>> {
     let mut movies = HashMap::new();
 
@@ -375,6 +426,9 @@ pub fn download(
         Dataset::Movielens25m => {
             "https://files.grouplens.org/datasets/movielens/ml-25m-README.html"
         }
+        Dataset::Movielens32m => {
+            "https://files.grouplens.org/datasets/movielens/ml-32m-README.html"
+        }
         Dataset::MovielensLatestSmall => {
             "https://files.grouplens.org/datasets/movielens/ml-latest-small-README.html"
         }
@@ -388,6 +442,7 @@ pub fn download(
         Dataset::Movielens100k => download_movielens_100k(&output, overwrite),
         Dataset::Movielens1m => download_movielens_1m(&output, overwrite),
         Dataset::Movielens25m => download_movielens_25m(&output, overwrite),
+        Dataset::Movielens32m => download_movielens_32m(&output, overwrite),
         Dataset::MovielensLatestSmall => download_movielens_latest_small(&output, overwrite),
         Dataset::MovielensLatest => download_movielens_latest(&output, overwrite),
     };

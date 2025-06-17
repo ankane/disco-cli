@@ -1,5 +1,6 @@
 ## 0.1.3 (unreleased)
 
+- Added `movielens-32m` dataset
 - Updated hash for `movielens-latest` dataset
 
 ## 0.1.2 (2024-07-04)
