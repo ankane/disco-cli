@@ -312,7 +312,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
 
     let archive_data = download_file(
         "https://files.grouplens.org/datasets/movielens/ml-latest.zip",
-        "b9c23b665ee348bd1fadfadca688b8750c575f3af76d3441cd50cba87ad2c4df",
+        "66a9e518c747d76b241d9a859b001a2619d3ed1672ceef599eb50daf73a7b4a3",
     )?;
     let cursor = Cursor::new(archive_data);
     let mut archive = zip::ZipArchive::new(cursor)?;

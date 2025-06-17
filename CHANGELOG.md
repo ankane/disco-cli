@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Updated hash for `movielens-latest` dataset
+
 ## 0.1.2 (2024-07-04)
 
 - Reduced dependencies
