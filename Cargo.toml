@@ -17,7 +17,7 @@ discorec = "0.2"
 indicatif = "0.17"
 sha2 = "0.10"
 ureq = { version = "3", default-features = false, features = ["gzip", "platform-verifier", "rustls"] }
-zip = { version = "4", default-features = false, features = ["deflate-flate2", "deflate-flate2-zlib"] }
+zip = { version = "4", default-features = false, features = ["deflate-flate2"] }
 
 [[bin]]
 name = "disco"
