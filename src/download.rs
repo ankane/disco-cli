@@ -235,7 +235,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-25m/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
+        let mut rdr = csv::Reader::from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -252,7 +252,7 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     let bar = progress_bar(25000095, "Processing", "{msg} {wide_bar} {percent}%");
 
     let ratings_data = archive.by_name("ml-25m/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
+    let mut rdr = csv::Reader::from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -281,7 +281,7 @@ fn download_movielens_32m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-32m/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
+        let mut rdr = csv::Reader::from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -298,7 +298,7 @@ fn download_movielens_32m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     let bar = progress_bar(32000204, "Processing", "{msg} {wide_bar} {percent}%");
 
     let ratings_data = archive.by_name("ml-32m/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
+    let mut rdr = csv::Reader::from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -327,7 +327,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-latest-small/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
+        let mut rdr = csv::Reader::from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -341,7 +341,7 @@ fn download_movielens_latest_small(output: &Path, overwrite: bool) -> Result<(),
     wtr.write_record(["user_id", "item_id", "rating"])?;
 
     let ratings_data = archive.by_name("ml-latest-small/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
+    let mut rdr = csv::Reader::from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
@@ -368,7 +368,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-latest/movies.csv")?;
-        let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
+        let mut rdr = csv::Reader::from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
             let id = record.get(0).unwrap().to_string();
@@ -385,7 +385,7 @@ fn download_movielens_latest(output: &Path, overwrite: bool) -> Result<(), Box<d
     let bar = progress_bar(27753444, "Processing", "{msg} {wide_bar} {percent}%");
 
     let ratings_data = archive.by_name("ml-latest/ratings.csv")?;
-    let mut rdr = csv::ReaderBuilder::new().from_reader(ratings_data);
+    let mut rdr = csv::Reader::from_reader(ratings_data);
     for result in rdr.records() {
         let record = result?;
         let user_id = record.get(0).unwrap().to_string();
