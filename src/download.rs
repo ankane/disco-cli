@@ -126,7 +126,6 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
     {
         let movies_data = archive.by_name("ml-100k/u.item")?;
         let rdr = BufReader::new(movies_data);
-
         let mut buf = Vec::new();
         for b in rdr.bytes() {
             let v = b.unwrap();
@@ -188,7 +187,6 @@ fn download_movielens_1m(output: &Path, overwrite: bool) -> Result<(), Box<dyn E
     // make borrow checker happy
     {
         let mut movies_data = archive.by_name("ml-1m/movies.dat")?;
-
         // remove invalid UTF-8 bytes
         let mut buf = Vec::new();
         movies_data.read_to_end(&mut buf)?;
@@ -237,7 +235,6 @@ fn download_movielens_25m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-25m/movies.csv")?;
-
         let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
@@ -284,7 +281,6 @@ fn download_movielens_32m(output: &Path, overwrite: bool) -> Result<(), Box<dyn 
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-32m/movies.csv")?;
-
         let mut rdr = csv::ReaderBuilder::new().from_reader(movies_data);
         for result in rdr.records() {
             let record = result?;
