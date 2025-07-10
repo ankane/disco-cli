@@ -125,9 +125,10 @@ fn download_movielens_100k(output: &Path, overwrite: bool) -> Result<(), Box<dyn
     // make borrow checker happy
     {
         let movies_data = archive.by_name("ml-100k/u.item")?;
+        let rdr = BufReader::new(movies_data);
 
         let mut buf = Vec::new();
-        for b in movies_data.bytes() {
+        for b in rdr.bytes() {
             let v = b.unwrap();
 
             // ISO-8859-1 to UTF-8
