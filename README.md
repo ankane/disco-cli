@@ -6,7 +6,7 @@
 - Works with explicit and implicit feedback
 - Uses high-performance matrix factorization
 
-Also available for [Rust](https://github.com/ankane/disco-rust) and [Ruby](https://github.com/ankane/disco)
+Also available for [Rust](https://github.com/ankane/disco-rust), [Ruby](https://github.com/ankane/disco), [Node.js](https://github.com/ankane/disco-node), [Go](https://github.com/ankane/disco-go), [PHP](https://github.com/ankane/disco-php), [C++](https://github.com/ankane/disco-cpp), [Java](https://github.com/ankane/disco-java), and [.NET](https://github.com/ankane/disco-dotnet)
 
 [![Build Status](https://github.com/ankane/disco-cli/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/disco-cli/actions)
 
