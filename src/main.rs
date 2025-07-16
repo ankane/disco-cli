@@ -128,7 +128,7 @@ fn main() {
     };
 
     if let Err(err) = res {
-        eprintln!("{}", err);
+        eprintln!("{err}");
         process::exit(1);
     }
 }

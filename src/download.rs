@@ -43,7 +43,7 @@ impl FromStr for Dataset {
             "movielens-latest-small" => Ok(Dataset::MovielensLatestSmall),
             "movielens-latest" => Ok(Dataset::MovielensLatest),
             // not shown since possible_values used
-            _ => Err(format!("Invalid dataset: {}", s)),
+            _ => Err(format!("Invalid dataset: {s}")),
         }
     }
 }
@@ -68,7 +68,7 @@ fn sha256(contents: &[u8]) -> String {
 
     let mut s = String::with_capacity(result.len() * 2);
     for b in result {
-        write!(&mut s, "{:02x}", b).unwrap();
+        write!(&mut s, "{b:02x}").unwrap();
     }
 
     s
@@ -107,7 +107,7 @@ fn download_file(url: &str, expected_hash: &str) -> Result<Vec<u8>, Box<dyn Erro
 
     let hash = sha256(&contents);
     if hash != expected_hash {
-        return Err(format!("Bad hash: {}", hash).into());
+        return Err(format!("Bad hash: {hash}").into());
     }
     Ok(contents)
 }
@@ -433,7 +433,7 @@ pub fn download(
             "https://files.grouplens.org/datasets/movielens/ml-latest-README.html"
         }
     };
-    eprintln!("For dataset usage info, see {}", usage_url);
+    eprintln!("For dataset usage info, see {usage_url}");
 
     let res = match dataset {
         Dataset::Movielens100k => download_movielens_100k(&output, overwrite),
