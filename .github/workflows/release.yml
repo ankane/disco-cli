@@ -18,8 +18,8 @@ jobs:
           os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
+    - uses: actions/checkout@v5
       with:
         repository: ankane/3pl-source
         path: 3pl-source
@@ -28,7 +28,7 @@ jobs:
         target: ${{ matrix.target }}
         manual-licenses-source: 3pl-source
       id: rust-release
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{ steps.rust-release.outputs.artifact-name }}
         path: ${{ steps.rust-release.outputs.artifact-path }}
