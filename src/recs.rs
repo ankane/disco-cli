@@ -1,5 +1,5 @@
 use crate::helpers::*;
-use discorec::{Dataset, Recommender, RecommenderBuilder};
+use discorec::{Recommender, RecommenderBuilder};
 use std::error::Error;
 use std::fs::File;
 use std::io::ErrorKind;
@@ -36,12 +36,12 @@ fn fit_recommender(
         .position(|r| r == value_header)
         .ok_or("Missing rating/value column")?;
 
-    let mut dataset = Dataset::new();
+    let mut dataset = Vec::new();
     for (i, result) in rdr.records().enumerate() {
         let record = result?;
 
         // safe to unwrap since csv::Reader checks for same number of columns as header
-        dataset.push(
+        dataset.push((
             record.get(user_index).unwrap().to_string(),
             record.get(item_index).unwrap().to_string(),
             // match CSV error: record 1 (line: 2, byte: 23): found record with 2 fields
@@ -58,7 +58,7 @@ fn fit_recommender(
                         e
                     )
                 })?,
-        );
+        ));
     }
 
     let bar = progress_bar(
@@ -98,7 +98,7 @@ pub fn user_recs(
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
-    let mut user_ids = recommender.user_ids().clone();
+    let mut user_ids = recommender.user_ids().to_vec();
     user_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
@@ -136,7 +136,7 @@ pub fn item_recs(
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
-    let mut item_ids = recommender.item_ids().clone();
+    let mut item_ids = recommender.item_ids().to_vec();
     item_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
@@ -174,7 +174,7 @@ pub fn similar_users(
     }
 
     let recommender = fit_recommender(input, factors, iterations)?;
-    let mut user_ids = recommender.user_ids().clone();
+    let mut user_ids = recommender.user_ids().to_vec();
     user_ids.sort_unstable();
 
     let mut wtr = create_csv(output, overwrite)?;
