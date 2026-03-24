@@ -14,10 +14,10 @@ readme = "README.md"
 clap = { version = "4", default-features = false, features = ["std", "help", "usage", "error-context", "suggestions", "derive"] }
 csv = "1"
 discorec = "0.3"
-indicatif = "0.17"
+indicatif = "0.18"
 sha2 = "0.10"
 ureq = { version = "3", default-features = false, features = ["gzip", "platform-verifier", "rustls"] }
-zip = { version = "4", default-features = false, features = ["deflate-flate2"] }
+zip = { version = "8", default-features = false, features = ["deflate-flate2"] }
 
 [[bin]]
 name = "disco"
